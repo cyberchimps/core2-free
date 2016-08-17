@@ -425,9 +425,6 @@ if( !class_exists( 'AT_Meta_Box' ) ) :
 			if( $this->_Local_images ) {
 				echo $plugin_path . '/images/add.png';
 			}
-			else {
-				echo 'http://i.imgur.com/w5Tuc.png';
-			}
 			echo '" alt="' . __( 'Add', 'cyberchimps_core' ) . '" title="' . __( 'Add', 'cyberchimps_core' ) . '" id="add-' . $field['id'] . '"><br/></div>';
 
 			//create all fields once more for js function and catch with object buffer

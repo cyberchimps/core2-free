@@ -38,16 +38,8 @@ if ( !function_exists( 'cyberchimps_core_setup_theme' ) ):
 		// Load core options file
 		require_once( $directory . '/cyberchimps/options/options-init.php' );
 
-		// Load default core settings
-		require_once( $directory . '/cyberchimps/options/options-core.php' );
-
 		// Load core hooks file
 		require_once( $directory . '/cyberchimps/inc/cc-custom-background.php' );
-
-		//Load pro features if a pro theme. Load prior to meta boxes so that filters work
-		if ( cyberchimps_theme_check() == 'pro' ) {
-			require_once( $directory . '/elements/setup/features.php' );
-		}
 
 		// Load new meta box class
 		require_once( $directory . '/cyberchimps/options/meta-box-class/my-meta-box-class.php' );
@@ -85,18 +77,6 @@ if ( !function_exists( 'cyberchimps_core_setup_theme' ) ):
 		register_nav_menus( array(
 			                    'primary' => __( 'Primary Menu', 'cyberchimps_core' ),
 		                    ) );
-
-		//set up defaults
-		$option_defaults = cyberchimps_get_default_values();
-		if ( !get_option( 'cyberchimps_options' ) && isset( $_GET['activated'] ) ) {
-			update_option( 'cyberchimps_options', $option_defaults );
-		} //if not then set up defaults for this theme
-		elseif ( get_option( 'cyberchimps_options' ) && isset( $_GET['activated'] ) ) {
-			$options                         = get_option( 'cyberchimps_options' );
-			$options['header_section_order'] = $option_defaults['header_section_order'];
-			$options['theme_backgrounds']    = $option_defaults['theme_backgrounds'];
-			update_option( 'cyberchimps_options', $options );
-		}
 	}
 endif; // cyberchimps_core_setup_theme
 add_action( 'after_setup_theme', 'cyberchimps_core_setup_theme' );
@@ -162,18 +142,6 @@ function cyberchimps_custom_background_cb() {
 // Register our sidebars and widgetized areas.
 function cyberchimps_widgets_init() {
 
-	// Add left sidebar only to pro themes as it is not avialble in free.
-	if ( 'pro' == cyberchimps_theme_check() ) {
-		register_sidebar( array(
-		                  'name'          => __( 'Sidebar Left', 'cyberchimps_core' ),
-		                  'id'            => 'sidebar-left',
-		                  'before_widget' => apply_filters( 'cyberchimps_sidebar_before_widget', '<aside id="%1$s" class="widget-container %2$s">' ),
-		                  'after_widget'  => apply_filters( 'cyberchimps_sidebar_after_widget', '</aside>' ),
-		                  'before_title'  => apply_filters( 'cyberchimps_sidebar_before_widget_title', '<h3 class="widget-title">' ),
-		                  'after_title'   => apply_filters( 'cyberchimps_sidebar_after_widget_title', '</h3>' )
-	                  ) );
-	}
-
 	register_sidebar( array(
 		                  'name'          => __( 'Sidebar Right', 'cyberchimps_core' ),
 		                  'id'            => 'sidebar-right',
@@ -208,15 +176,3 @@ function cyberchimps_load_hooks() {
 }
 
 add_action( 'after_setup_theme', 'cyberchimps_load_hooks' );
-
-//after install redirect user to options page if it's a pro theme.
-function cyberchimps_pro_welcome_notice() {
-	global $pagenow;
-	if ( is_admin() && isset( $_GET['activated'] ) && $pagenow == "themes.php" ) {
-
-		if ( 'pro' == cyberchimps_theme_check() ) {
-			wp_redirect( 'themes.php?page=cyberchimps-theme-options' );
-		}
-	}
-}
-add_action( 'after_setup_theme', 'cyberchimps_pro_welcome_notice' );

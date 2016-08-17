@@ -28,10 +28,10 @@ function cyberchimps_blog_section_order_action() {
 		$defaults[] = $key;
 	}
 
-	$blog_section_order = cyberchimps_get_option( 'blog_section_order', $defaults );
+	$blog_section_order = get_theme_mod( 'blog_section_order', $defaults );
 	//select default in case options are empty
 	$blog_section_order = ( $blog_section_order == '' ) ? array( 'blog_post_page' ) : $blog_section_order;
-	$slider_size        = cyberchimps_get_option( 'blog_slider_size', 'full' );
+	$slider_size        = get_theme_mod( 'blog_slider_size', 'full' );
 	if( is_array( $blog_section_order ) ) {
 
 		// Check if both of slider and blog post were active
@@ -44,6 +44,42 @@ function cyberchimps_blog_section_order_action() {
 			$slider_order = $position_slider > $position_blog_post ? 'after' : 'before';
 			cyberchimps_add_half_slider_action( $slider_order );
 		}
+		
+		$cyberchimps_display_footer = ( get_theme_mod( 'footer_show_toggle', 1 ) ) ? get_theme_mod( 'footer_show_toggle', 1 ) : false;
+		if($cyberchimps_display_footer == 1)
+		{
+			set_theme_mod('footer_show_toggle', '1');
+		}
+		$cyberchimps_display_slider = ( get_theme_mod( 'cyberchimps_display_slider', 1 ) ) ? get_theme_mod( 'cyberchimps_display_slider', 1 ) : false;
+		$cyberchimps_display_portfolio = ( get_theme_mod( 'cyberchimps_display_portfolio', 1 ) ) ? get_theme_mod( 'cyberchimps_display_portfolio', 1 ) : false;
+		$cyberchimps_display_boxes = ( get_theme_mod( 'cyberchimps_display_boxes', 1 ) ) ? get_theme_mod( 'cyberchimps_display_boxes', 1 ) : false;
+
+		if($cyberchimps_display_slider == 1)
+		{
+			array_unshift($blog_section_order, "slider_lite");
+		}
+		else{
+			$sliderelemid = array_search('slider_lite', $blog_section_order);
+			unset($blog_section_order[$sliderelemid]);
+		}
+		if($cyberchimps_display_portfolio == 1)
+		{
+			array_unshift($blog_section_order, "portfolio_lite");
+		}
+		else{
+			$portfolioelemid = array_search('portfolio_lite', $blog_section_order);
+			unset($blog_section_order[$portfolioelemid]);
+		}
+		if($cyberchimps_display_boxes == 1 )
+		{       
+			array_unshift($blog_section_order, "boxes_lite");
+		}
+		else{
+			$boxelemid = array_search('boxes_lite', $blog_section_order);
+			unset($blog_section_order[$boxelemid]);
+		}
+		
+		$blog_section_order = array_unique($blog_section_order);
 
 		foreach( $blog_section_order as $func ) {
 			// checks if slider is selected at half size, if it is it removes it so we can display it above blog content
@@ -116,9 +152,9 @@ add_action( 'blog_post_page', 'cyberchimps_post' );
 function cyberchimps_blog_title() {
 	if( is_home() ) {
 		// Add blog title if toggle is on.
-		$title_toggle = cyberchimps_get_option( 'blog_title', false );
+		$title_toggle = get_theme_mod( 'blog_title', false );
 		if( $title_toggle ) {
-			$title_text = cyberchimps_get_option( 'blog_title_text', __( 'Our Blog', 'cyberchimps_core' ) );
+			$title_text = get_theme_mod( 'blog_title_text', __( 'Our Blog', 'cyberchimps_core' ) );
 			echo apply_filters( 'cyberchimps_blog_title_html', '
         <div id="cyberchimps_blog_title" class="row-fluid">
             <header class="page-header">

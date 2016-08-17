@@ -62,8 +62,8 @@ if( !function_exists( 'cyberchimps_css_styles' ) ) {
 
 			<?php } 
 			
-			$width = intval( cyberchimps_get_option( 'max_width' ) ) . 'px';
-			if( !cyberchimps_get_option( 'responsive_design', 'checked' ) ) {
+			$width = intval( get_theme_mod( 'max_width' ) ) . 'px';
+			if( !get_theme_mod( 'responsive_design', 'checked' ) ) {
 			?>
 				@media screen and (max-width: <?php echo $width; ?>) {
 					.container-full-width {
@@ -88,8 +88,9 @@ add_action( 'wp_head', 'cyberchimps_css_styles', 50 );
 function cyberchimps_headings_styles() {
 
 	// Set header font family.
-	$headings_styles      = cyberchimps_get_option( 'font_family_headings' );
-	$google_font_headings = cyberchimps_get_option( 'google_font_headings' );
+	$fetch_customize_options = get_theme_mod('customize_options');
+	$headings_styles      = isset($fetch_customize_options['font_family_headings']) ? $fetch_customize_options['font_family_headings'] : '';
+	$google_font_headings = isset($fetch_customize_options['google_font_headings']) ? $fetch_customize_options['google_font_headings'] : '';
 
 	// older versions will have saved the font family as a string so we need to check for that first
 	if( is_array( $headings_styles ) ) {
@@ -125,9 +126,12 @@ function cyberchimps_headings_styles() {
 // creates body_styles array from options
 function cyberchimps_body_styles() {
 	$body_styles = array();
-	
-	if( cyberchimps_get_option( 'typography_options' ) ) {
-		$typography_options = cyberchimps_get_option( 'typography_options' );
+	if( get_theme_mod( 'text_colorpicker' ) ) {
+		$body_styles['color'] = get_theme_mod( 'text_colorpicker' );
+	}
+       $customize_typography_options = get_theme_mod( 'customize_options' );
+	if( $customize_typography_options['typography_options'] ) {
+		$typography_options = $customize_typography_options['typography_options'];
 		// changes terminology for typography to css elements
 		foreach( $typography_options as $option => $value ) {
 			if( $option == 'size' ) {
@@ -146,10 +150,10 @@ function cyberchimps_body_styles() {
 	}
 
 	// Set font-family if google font is on
-	$google_font = cyberchimps_get_option( 'google_font_field' );
+	$google_font = isset($customize_typography_options['google_font_field']) ? $customize_typography_options['google_font_field'] : '';
 
-	if( $body_styles['font-family'] == "Google Fonts" && $google_font != "" ) {
-		$body_styles['font-family'] = $google_font;
+	if( isset( $body_styles['font-family'] ) && $body_styles['font-family'] == "Google Fonts" && $google_font != "" ) {
+		$body_styles['font-family'] = '"'.$google_font.'"';
 
 		// Check if SSL is present, if so then use https othereise use http
 		$protocol = is_ssl() ? 'https' : 'http';
@@ -157,20 +161,18 @@ function cyberchimps_body_styles() {
 		wp_register_style( 'google-font', $protocol . '://fonts.googleapis.com/css?family=' . $google_font );
 		wp_enqueue_style( 'google-font' );
 	}
-	if( cyberchimps_get_option( 'text_colorpicker' ) ) {
-		$body_styles['color'] = cyberchimps_get_option( 'text_colorpicker' );
-	}
+
 	return $body_styles;
 }
 
 // creates link color array for just a tag
 function cyberchimps_link_styles() {
 	$link_styles = array();
-	if( cyberchimps_get_option( 'link_colorpicker' ) ) {
-		$link_styles['a'] = cyberchimps_get_option( 'link_colorpicker' );
+	if( get_theme_mod( 'link_colorpicker' ) ) {
+		$link_styles['a'] = get_theme_mod( 'link_colorpicker' );
 	}
-	if( cyberchimps_get_option( 'link_hover_colorpicker' ) ) {
-		$link_styles['a:hover'] = cyberchimps_get_option( 'link_hover_colorpicker' );
+	if( get_theme_mod( 'link_hover_colorpicker' ) ) {
+		$link_styles['a:hover'] = get_theme_mod( 'link_hover_colorpicker' );
 	}
 
 	return $link_styles;
@@ -179,9 +181,9 @@ function cyberchimps_link_styles() {
 // creates width for main container of website
 function cyberchimps_layout_styles() {
 	$container_styles = array();
-	if( cyberchimps_get_option( 'max_width' ) ) {
-		$width = intval( cyberchimps_get_option( 'max_width' ) );
-		$key   = ( cyberchimps_get_option( 'responsive_design', 'checked' ) ) ? 'max-width' : 'width';
+	if( get_theme_mod( 'max_width' ) ) {
+		$width = intval( get_theme_mod( 'max_width' ) );
+		$key   = ( get_theme_mod( 'responsive_design', 'checked' ) ) ? 'max-width' : 'width';
 		if( $width < 400 || empty( $width ) ) {
 			$container_styles[$key] = 1020;
 		}
@@ -195,8 +197,8 @@ function cyberchimps_layout_styles() {
 
 // add favicon
 function cyberchimps_favicon() {
-	if( cyberchimps_get_option( 'custom_favicon' ) ) :
-		$favicon = cyberchimps_get_option( 'favicon_uploader' );
+	if( get_theme_mod( 'custom_favicon' ) ) :
+		$favicon = get_theme_mod( 'favicon_uploader' );
 		if( $favicon != '' ):?>
 			<link rel="shortcut icon" href="<?php echo stripslashes( $favicon ); ?>" type="image/x-icon"/>
 		<?php endif;
@@ -208,8 +210,8 @@ add_action( 'admin_head', 'cyberchimps_favicon', 2 );
 
 // add apple touch icon
 function cyberchimps_apple() {
-	if( cyberchimps_get_option( 'custom_apple' ) ) :
-		$apple = cyberchimps_get_option( 'apple_touch_uploader' );
+	if( get_theme_mod( 'custom_apple' ) ) :
+		$apple = get_theme_mod( 'apple_touch_uploader' );
 		if( $apple != '' ): ?>
 			<link rel="apple-touch-icon" href="<?php echo stripslashes( $apple ); ?>"/>
 		<?php endif;
@@ -220,7 +222,7 @@ add_action( 'wp_head', 'cyberchimps_apple', 2 );
 
 // add styles for skin selection
 function cyberchimps_skin_styles() {
-	$skin = cyberchimps_get_option( 'cyberchimps_skin_color' );
+	$skin = get_theme_mod( 'cyberchimps_skin_color' );
 	if( $skin != 'default' ) {
 		wp_enqueue_style( 'skin-style', get_template_directory_uri() . '/inc/css/skins/' . $skin . '.css', array( 'style' ), '1.0' );
 	}
@@ -230,7 +232,7 @@ add_action( 'wp_enqueue_scripts', 'cyberchimps_skin_styles', 35 );
 
 // Add custom header scripts.
 function cyberchimps_header_scripts() {
-	$header_scripts = cyberchimps_get_option( 'header_scripts' );
+	$header_scripts = get_theme_mod( 'header_scripts' );
 	echo $header_scripts;
 }
 
