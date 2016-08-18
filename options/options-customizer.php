@@ -799,7 +799,8 @@ function cyberchimps_customize( $wp_customize ) {
     //Choose to display Blog Slider on Blog page
     
     $wp_customize->add_setting('cyberchimps_display_slider', array(
-    	    'default'    => '1'
+    	    'default'    => '1',
+    		'sanitize_callback' => 'cyberchimps_sanitize_checkbox'
     	));
     
     $wp_customize->add_control( new WP_Customize_Control(
@@ -830,7 +831,8 @@ function cyberchimps_customize( $wp_customize ) {
     
     //Choose to display Portfolio on Blog page
     $wp_customize->add_setting('cyberchimps_display_portfolio', array(
-      'default'    => '1'
+      'default'    => '1',
+      'sanitize_callback' => 'cyberchimps_sanitize_checkbox'
     ));
     
    $wp_customize->add_control(new WP_Customize_Control($wp_customize,'cyberchimps_display_portfolio',
@@ -845,7 +847,8 @@ function cyberchimps_customize( $wp_customize ) {
     
     //Choose to display Boxes on Blog page
     $wp_customize->add_setting('cyberchimps_display_boxes', array(
-    'default'    => '1'
+    'default'    => '1',
+    'sanitize_callback' => 'cyberchimps_sanitize_checkbox'
     ));
     
     $wp_customize->add_control(
