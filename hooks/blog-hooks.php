@@ -79,7 +79,7 @@ function cyberchimps_blog_section_order_action() {
 			unset($blog_section_order[$boxelemid]);
 		}
 		
-		$blog_section_order = array_unique($blog_section_order);
+		$blog_section_order = array_unique(apply_filters('cyberchimp_blog_section_order' , $blog_section_order));
 
 		foreach( $blog_section_order as $func ) {
 			// checks if slider is selected at half size, if it is it removes it so we can display it above blog content

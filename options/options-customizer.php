@@ -273,7 +273,7 @@ function cyberchimps_customize( $wp_customize ) {
 
     //Disable logo
     $wp_customize->add_setting( 'custom_logo', array(
-    	'default' => '',    		
+    	'default' => apply_filters('cyberchimps_display_logo_option' , ''),    		
         'sanitize_callback' => 'cyberchimps_sanitize_checkbox'
     ) );
     $wp_customize->add_control( 'custom_logo', array(
@@ -286,7 +286,6 @@ function cyberchimps_customize( $wp_customize ) {
     // Add Logo image
     $wp_customize->add_setting( 'custom_logo_uploader', array(
         'default' => apply_filters( 'cyberchimps_default_logo', $imagepath . '/achimps.png' ),
-        'type' => 'option',
         'sanitize_callback' => 'cyberchimps_sanitize_upload'
     ) );
 

@@ -157,6 +157,17 @@ add_action( 'cyberchimps_logo', 'cyberchimps_logo' );
 function cyberchimps_header_logo() {
 
 	$url = ( get_theme_mod( 'custom_logo_url' ) == '1' ) ? get_theme_mod( 'custom_logo_url_link' ) : esc_url( home_url() );
+	
+	$theme_options_main = get_option('theme_mods_'.get_template());
+	if(!isset($theme_options_main['custom_logo']))
+	{
+		set_theme_mod('custom_logo', 1);
+	}
+	if(!isset($theme_options_main['custom_logo_uploader']))
+	{
+		set_theme_mod('custom_logo_uploader', apply_filters( 'cyberchimps_default_logo', get_template_directory_uri() . '/cyberchimps/lib/images/achimps.png' ));
+	}
+	
 	if ( get_theme_mod( 'custom_logo' ) == '1' ) {
 		$logo = get_theme_mod( 'custom_logo_uploader' );
 		?>
