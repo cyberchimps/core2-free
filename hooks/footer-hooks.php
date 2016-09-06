@@ -28,7 +28,7 @@ function cyberchimps_footer_credit() {
 				<footer class="site-footer row-fluid">
 					<div class="span6">
 						<div id="credit">
-							<?php if( cyberchimps_get_option( 'footer_cyberchimps_link', 1 ) == '1' ): ?>
+							<?php if( get_theme_mod( 'footer_cyberchimps_link', 1 ) == '1' ): ?>
 								<a href="http://cyberchimps.com/" target="_blank" title="CyberChimps Themes">
 									<?php if( 'free' == cyberchimps_theme_check() ) { ?>
 										<h4 class="cc-credit-text">CyberChimps WordPress Themes</h4></a>
@@ -46,7 +46,7 @@ function cyberchimps_footer_credit() {
 					</div>
 					<!-- Adds the afterfooter copyright area -->
 					<div class="span6">
-						<?php $copyright = ( cyberchimps_get_option( 'footer_copyright_text' ) ) ? cyberchimps_get_option( 'footer_copyright_text' ) : 'CyberChimps &#169;' . date( 'Y' ); ?>
+						<?php $copyright = ( get_theme_mod( 'footer_copyright_text' ) ) ? get_theme_mod( 'footer_copyright_text' ) : 'CyberChimps &#169;' . date( 'Y' ); ?>
 						<div id="copyright">
 							<?php echo wp_kses_post( $copyright ); ?>
 						</div>

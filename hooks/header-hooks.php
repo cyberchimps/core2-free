@@ -23,7 +23,7 @@ function cyberchimps_header_section_order() {
 		$defaults[] = $key;
 	}
 	// call the database results and if they don't exist then call the defaults from above
-	$header_section = cyberchimps_get_option( 'header_section_order', $defaults );
+	$header_section = get_theme_mod( 'header_section_order', $defaults );
 	$header_section = ( $header_section == '' ) ? $defaults : $header_section;
 
 	if ( is_array( $header_section ) ) {
@@ -156,9 +156,20 @@ add_action( 'cyberchimps_logo', 'cyberchimps_logo' );
 // Header left content (sitename or logo)
 function cyberchimps_header_logo() {
 
-	$url = ( cyberchimps_get_option( 'custom_logo_url' ) == '1' ) ? cyberchimps_get_option( 'custom_logo_url_link' ) : esc_url( home_url() );
-	if ( cyberchimps_get_option( 'custom_logo' ) == '1' ) {
-		$logo = cyberchimps_get_option( 'custom_logo_uploader' );
+	$url = ( get_theme_mod( 'custom_logo_url' ) == '1' ) ? get_theme_mod( 'custom_logo_url_link' ) : esc_url( home_url() );
+	
+	$theme_options_main = get_option('theme_mods_'.get_template());
+	if(!isset($theme_options_main['custom_logo']))
+	{
+		set_theme_mod('custom_logo', 1);
+	}
+	if(!isset($theme_options_main['custom_logo_uploader']))
+	{
+		set_theme_mod('custom_logo_uploader', apply_filters( 'cyberchimps_default_logo', get_template_directory_uri() . '/cyberchimps/lib/images/achimps.png' ));
+	}
+	
+	if ( get_theme_mod( 'custom_logo' ) == '1' ) {
+		$logo = get_theme_mod( 'custom_logo_uploader' );
 		?>
 		<div id="logo">
 			<a href="<?php echo $url; ?>" title="<?php echo get_bloginfo( 'name' ); ?>"><img src="<?php echo stripslashes( $logo ); ?>" alt="<?php echo get_bloginfo( 'name' ); ?>"></a>
@@ -191,35 +202,35 @@ function cyberchimps_header_site_title() {
 function cyberchimps_header_social_icons() {
 
 	// get the design of the icons to apply the right class
-	$design = cyberchimps_get_option( 'theme_backgrounds', 'default' );
+	$design = get_theme_mod( 'theme_backgrounds', 'default' );
 
 	// create array of social icons to loop through to check if they are set and add title key to
 	// social networks with names different to key
 
-	$social['twitterbird']['set']   = cyberchimps_get_option( 'social_twitter', 'checked' );
+	$social['twitterbird']['set']   = get_theme_mod( 'social_twitter', 'checked' );
 	$social['twitterbird']['title'] = 'twitter';
-	$social['twitterbird']['url']   = cyberchimps_get_option( 'twitter_url' );
-	$social['facebook']['set']      = cyberchimps_get_option( 'social_facebook', 'checked' );
-	$social['facebook']['url']      = cyberchimps_get_option( 'facebook_url' );
-	$social['googleplus']['set']    = cyberchimps_get_option( 'social_google', 'checked' );
-	$social['googleplus']['url']    = cyberchimps_get_option( 'google_url' );
-	$social['flickr']['set']        = cyberchimps_get_option( 'social_flickr' );
-	$social['flickr']['url']        = cyberchimps_get_option( 'flickr_url' );
-	$social['pinterest']['set']     = cyberchimps_get_option( 'social_pinterest' );
-	$social['pinterest']['url']     = cyberchimps_get_option( 'pinterest_url' );
-	$social['linkedin']['set']      = cyberchimps_get_option( 'social_linkedin' );
-	$social['linkedin']['url']      = cyberchimps_get_option( 'linkedin_url' );
-	$social['youtube']['set']       = cyberchimps_get_option( 'social_youtube' );
-	$social['youtube']['url']       = cyberchimps_get_option( 'youtube_url' );
-	$social['map']['set']           = cyberchimps_get_option( 'social_googlemaps' );
+	$social['twitterbird']['url']   = get_theme_mod( 'twitter_url' );
+	$social['facebook']['set']      = get_theme_mod( 'social_facebook', 'checked' );
+	$social['facebook']['url']      = get_theme_mod( 'facebook_url' );
+	$social['googleplus']['set']    = get_theme_mod( 'social_google', 'checked' );
+	$social['googleplus']['url']    = get_theme_mod( 'google_url' );
+	$social['flickr']['set']        = get_theme_mod( 'social_flickr' );
+	$social['flickr']['url']        = get_theme_mod( 'flickr_url' );
+	$social['pinterest']['set']     = get_theme_mod( 'social_pinterest' );
+	$social['pinterest']['url']     = get_theme_mod( 'pinterest_url' );
+	$social['linkedin']['set']      = get_theme_mod( 'social_linkedin' );
+	$social['linkedin']['url']      = get_theme_mod( 'linkedin_url' );
+	$social['youtube']['set']       = get_theme_mod( 'social_youtube' );
+	$social['youtube']['url']       = get_theme_mod( 'youtube_url' );
+	$social['map']['set']           = get_theme_mod( 'social_googlemaps' );
 	$social['map']['title']         = 'google maps';
-	$social['map']['url']           = cyberchimps_get_option( 'googlemaps_url' );
-	$social['email']['set']         = cyberchimps_get_option( 'social_email' );
-	$social['email']['url']         = 'mailto:' . cyberchimps_get_option( 'email_url' );
-	$social['rss']['set']           = cyberchimps_get_option( 'social_rss' );
-	$social['rss']['url']           = cyberchimps_get_option( 'rss_url' );
-	$social['instagram']['set']		= cyberchimps_get_option( 'social_instagram' );
-	$social['instagram']['url']		= cyberchimps_get_option( 'instagram_url' );
+	$social['map']['url']           = get_theme_mod( 'googlemaps_url' );
+	$social['email']['set']         = get_theme_mod( 'social_email' );
+	$social['email']['url']         = 'mailto:' . get_theme_mod( 'email_url' );
+	$social['rss']['set']           = get_theme_mod( 'social_rss' );
+	$social['rss']['url']           = get_theme_mod( 'rss_url' );
+	$social['instagram']['set']		= get_theme_mod( 'social_instagram' );
+	$social['instagram']['url']		= get_theme_mod( 'instagram_url' );
 
 	$output = '';
 
@@ -258,7 +269,7 @@ function cyberchimps_custom_header_element_content() {
 	?>
 	<header id="cc-header" class="row-fluid">
 		<div class="span7">
-			<?php echo stripslashes( cyberchimps_get_option( 'custom_header_element' ) ); ?>
+			<?php echo stripslashes( get_theme_mod( 'custom_header_element' ) ); ?>
 		</div>
 	</header>
 <?php
@@ -295,9 +306,9 @@ add_action( 'cyberchimps_sitename_register', 'cyberchimps_logo_register_content'
 function cyberchimps_banner_content() {
 
 	// Getting banner options
-	$banner  = cyberchimps_get_option( 'header_banner_image' );
+	$banner  = get_theme_mod( 'header_banner_image' );
 	$default = get_template_directory_uri() . apply_filters( 'cyberchimps_banner_img', '/cyberchimps/lib/images/banner.jpg' );
-	$url     = cyberchimps_get_option( 'header_banner_url' );
+	$url     = get_theme_mod( 'header_banner_url' );
 	?>
 	<header id="cc-header" class="row-fluid">
 		<div id="banner">
@@ -316,7 +327,7 @@ add_action( 'cyberchimps_banner', 'cyberchimps_banner_content' );
 
 //contact info
 function cyberchimps_contact_info() {
-	$contact = apply_filters( 'cyberchimps_header_contact', cyberchimps_get_option( 'contact_details' ) ); ?>
+	$contact = apply_filters( 'cyberchimps_header_contact', get_theme_mod( 'contact_details' ) ); ?>
 
 	<div class="contact_details">
 		<?php echo $contact; ?>
